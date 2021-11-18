@@ -1,0 +1,141 @@
+#include<iostream>
+#include<Matrix.h>
+#include<MathCal.h>
+#include<ImRead.h>
+
+Matrix::Matrix(int _row, int _col) {
+    this->row = _row;
+    this->col = _col;
+    this->values = new long double*[_row];
+    for(int i=0; i<_row;i++) {
+        this->values[i] = new long double[_col];
+    }
+}
+
+
+Matrix::Matrix(const Image &ImageObj) {
+    this->row = 1024;
+    this->col = 1;
+    this->values = new long double*[this->row];
+    for(int i=0; i<this->row; i++) {
+        this->values[i] = new long double[this->col];
+        this->values[i][0] = (ImageObj.Blue[i]/3 + ImageObj.Green[i]/3 + ImageObj.Red[i]/3);
+    }
+}
+
+
+Matrix::~Matrix() {
+
+	for(int i=0; i<this->row; i++) {
+		delete[] this->values[i];
+	}
+	delete[] this->values;
+}
+
+
+void Matrix::Display() {
+
+    for(int i=0; i<this->row; i++) {
+            for(int j=0; j<this->col; j++) {
+                printf("%.20Lf ", this->values[i][j]);
+            }
+            std::cout<<std::endl;
+        }
+    printf("Shape:(%d,%d)\n",this->row,this->col);
+}
+
+
+Matrix Matrix::T() {
+	Matrix T_matrix = Matrix(this->col, this->row);
+    for(int i=0; i<this->row; i++)	{
+        for(int j=0; j<this->col;j++) {
+            T_matrix.values[j][i] = this->values[i][j];
+        }
+    }
+    return T_matrix;
+}
+
+
+Matrix* Matrix::operator*(const Matrix &Obj) {
+    if(this->col != Obj.row) {
+        std::cout<<"Dimensionality Error. Column("<<this->col<<") != Row("<<Obj.row<<")"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
+    Matrix* Product = new Matrix(this->row, Obj.col);
+    long double sum;
+    for(int row=0; row<this->row; row++) {
+        for(int col=0; col<Obj.col; col++) {
+            sum = 0;
+            for(int i=0; i<this->col; i++) {
+                sum += (this->values[row][i])*(Obj.values[i][col]);
+            }
+            Product->values[row][col] = sum;
+        }
+    } 
+    return Product;
+}
+
+
+Matrix* Matrix::operator+(const Matrix &Obj) {
+    if((this->row != Obj.row) & (this->col != Obj.col)) {
+        std::cout<<"Dimension Not Compatable. ("<<this->row<<","<<this->col<<") != ("<<Obj.row<<", "<<Obj.col<<")"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
+    Matrix* Sum = new Matrix(this->row, this->col);
+    for(int i=0; i<this->row; i++) {
+        for(int j=0; j<this->col; j++) {
+            Sum->values[i][j] = this->values[i][j] + Obj.values[i][j];
+        }
+    }
+    return Sum;
+}
+
+
+Matrix* Matrix::operator-(const Matrix &Obj) {
+    if((this->row != Obj.row) & (this->col != Obj.col)) {
+        std::cout<<"Dimension Not Compatable. ("<<this->row<<","<<this->col<<") != ("<<Obj.row<<", "<<Obj.col<<")"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
+    Matrix* Sub = new Matrix(this->row, this->col);
+    for(int i=0; i<this->row; i++) {
+        for(int j=0; j<this->col; j++) {
+            Sub->values[i][j] = this->values[i][j] - Obj.values[i][j];
+        }
+    }
+    return Sub;
+}
+
+
+Matrix* Matrix::Sigmoid() {
+    Matrix* Sig = new Matrix(this->row, this->col);
+    for(int i=0; i<this->row; i++) {
+        for(int j=0; j<this->col; j++) {
+            Sig->values[i][j] = _Sigmoid(this->values[i][j]);
+        }
+    }
+    return Sig;
+}
+
+
+Matrix* randomMatrix(int row, int col) {
+    Matrix* randMat = new Matrix(row, col);
+    for(int i=0; i<row; i++) {
+        for(int j=0; j<col; j++) {
+            randMat->values[i][j] = randomNumber(0l,1l);
+        }
+    }
+    return randMat;
+}
+
+
+Matrix operator *(long double I, const Matrix &M) {
+    Matrix Product = Matrix(M.row,M.col);
+    for(int i=0; i<M.row; i++) {
+        for(int j=0; j<M.col; j++) {
+            Product.values[i][j] = I*M.values[i][j];
+        }
+    }
+    return Product;
+}
+
+
