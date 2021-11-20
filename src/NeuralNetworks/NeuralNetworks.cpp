@@ -23,24 +23,43 @@ NeuralNetwork::~NeuralNetwork() {
 }
 
 
-Matrix* NeuralNetwork::FeedForward(Matrix* X) {
-    if(X->row != this->Layers[0]) {
+Matrix NeuralNetwork::FeedForward(Matrix &X) {
+    if(X.row != this->Layers[0]) {
         printf("ERROR: Input Data is not compatable with this NN.\nInput data shape(%d,%d) != NN input layer shape(%d,%d)",
-        X->row,X->col,this->Layers[0],1);
+        X.row,X.col,this->Layers[0],1);
     }
-    Matrix* temp;
+    Matrix A; 
+    A = X;
     for(int i=0; i<this->Length-1; i++) {
-        temp = X;
-        X = *this->Weights[i]*(*X);
-        delete temp;
-        temp = X;
-        X = *X+*this->Biases[i];
-        delete temp;
-        temp = X;
-        X = X->Sigmoid();
-        delete temp;
+        A = *this->Weights[i]*A;
+        A = A+*this->Biases[i];
+        A = A.Sigmoid();
     }
-    return X;
+    return A;
 
 }
 
+
+NeuralNetwork* NeuralNetwork::BackPropagation(Matrix &X, Matrix &Y) {
+    Matrix InputVectors[this->Length-1]; //a
+    Matrix ActivationVectors[this->Length-1]; //z
+    Matrix A;
+    A = X;
+    for(int i=0;i<this->Length-1;i++) {
+        InputVectors[i] = A;
+        A = (*this->Weights[i])*A + *this->Biases[i];
+        ActivationVectors[i] = A;
+        A = A.Sigmoid();
+    }
+
+    NeuralNetwork* GradNet = new NeuralNetwork(this->Layers,this->Length);
+    Matrix A_grad = (A - Y);
+    Matrix Z_grad;
+    for(int i=this->Length-2; i>=0; i--) {
+        Z_grad = HadamardProduct(A_grad,(ActivationVectors[i].SigmoidPrime())); 
+        *GradNet->Biases[i] = Z_grad;
+        *GradNet->Weights[i] = Z_grad*InputVectors[i].T();
+        A_grad = (*this->Weights[i]).T()*Z_grad;
+    }
+    return GradNet;
+}

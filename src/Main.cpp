@@ -5,6 +5,13 @@
 
 
 int main() {
+    Matrix Y = Matrix(10,1);
+    for(int i=0; i<10; i++) {
+        Y.values[i][0] = 0;
+    }
+    Y.values[6][0] = 1;
+    
+    
     const char* file_name = "../CIFAR/data_batch_1.bin";
     FILE* fpt;
     fpt = fopen(file_name,"rb");
@@ -20,11 +27,15 @@ int main() {
 
     int layers[] = {1024,30,40,10};
     NeuralNetwork testNet(layers,4);
-    X = testNet.FeedForward(X);
-    X->Display();
+    Matrix A = Matrix(1,1); 
+    A = testNet.FeedForward(*X);
+    A.Display();
+    NeuralNetwork* GradNet = testNet.BackPropagation(*X, Y);
+    GradNet->Weights[1]->Display();
     
     fclose(fpt);
     delete X;
     delete[] images;
+
 
 }

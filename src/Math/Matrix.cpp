@@ -3,6 +3,12 @@
 #include<MathCal.h>
 #include<ImRead.h>
 
+Matrix::Matrix() {
+    this->row = 1;
+    this->col = 1;
+    this->values = new long double*[1];
+    this->values[0] = new long double[1];
+}
 Matrix::Matrix(int _row, int _col) {
     this->row = _row;
     this->col = _col;
@@ -56,12 +62,12 @@ Matrix Matrix::T() {
 }
 
 
-Matrix* Matrix::operator*(const Matrix &Obj) {
+Matrix Matrix::operator*(const Matrix &Obj) {
     if(this->col != Obj.row) {
         std::cout<<"Dimensionality Error. Column("<<this->col<<") != Row("<<Obj.row<<")"<<std::endl;
         exit(EXIT_FAILURE);
     }
-    Matrix* Product = new Matrix(this->row, Obj.col);
+    Matrix Product = Matrix(this->row, Obj.col);
     long double sum;
     for(int row=0; row<this->row; row++) {
         for(int col=0; col<Obj.col; col++) {
@@ -69,53 +75,83 @@ Matrix* Matrix::operator*(const Matrix &Obj) {
             for(int i=0; i<this->col; i++) {
                 sum += (this->values[row][i])*(Obj.values[i][col]);
             }
-            Product->values[row][col] = sum;
+            Product.values[row][col] = sum;
         }
     } 
     return Product;
 }
 
 
-Matrix* Matrix::operator+(const Matrix &Obj) {
+Matrix Matrix::operator+(const Matrix &Obj) {
     if((this->row != Obj.row) & (this->col != Obj.col)) {
         std::cout<<"Dimension Not Compatable. ("<<this->row<<","<<this->col<<") != ("<<Obj.row<<", "<<Obj.col<<")"<<std::endl;
         exit(EXIT_FAILURE);
     }
-    Matrix* Sum = new Matrix(this->row, this->col);
+    Matrix Sum = Matrix(this->row, this->col);
     for(int i=0; i<this->row; i++) {
         for(int j=0; j<this->col; j++) {
-            Sum->values[i][j] = this->values[i][j] + Obj.values[i][j];
+            Sum.values[i][j] = this->values[i][j] + Obj.values[i][j];
         }
     }
     return Sum;
 }
 
 
-Matrix* Matrix::operator-(const Matrix &Obj) {
+Matrix Matrix::operator-(const Matrix &Obj) {
     if((this->row != Obj.row) & (this->col != Obj.col)) {
         std::cout<<"Dimension Not Compatable. ("<<this->row<<","<<this->col<<") != ("<<Obj.row<<", "<<Obj.col<<")"<<std::endl;
         exit(EXIT_FAILURE);
     }
-    Matrix* Sub = new Matrix(this->row, this->col);
+    Matrix Sub = Matrix(this->row, this->col);
     for(int i=0; i<this->row; i++) {
         for(int j=0; j<this->col; j++) {
-            Sub->values[i][j] = this->values[i][j] - Obj.values[i][j];
+            Sub.values[i][j] = this->values[i][j] - Obj.values[i][j];
         }
     }
     return Sub;
 }
 
 
-Matrix* Matrix::Sigmoid() {
-    Matrix* Sig = new Matrix(this->row, this->col);
+void Matrix::operator=(const Matrix &Obj) {
+    
+    for(int i=0; i<this->row; i++) {
+        delete[] this->values[i];
+    }
+    delete[] this->values;
+
+    this->row = Obj.row;
+    this->col = Obj.col;
+    this->values = new long double*[Obj.row];
+    for(int i=0; i<Obj.row;i++) {
+        this->values[i] = new long double[Obj.col];
+        for(int j=0; j<Obj.col; j++) {
+            this->values[i][j] = Obj.values[i][j];
+        }
+    }
+}
+
+
+Matrix Matrix::Sigmoid() {
+    Matrix Sig = Matrix(this->row, this->col);
     for(int i=0; i<this->row; i++) {
         for(int j=0; j<this->col; j++) {
-            Sig->values[i][j] = _Sigmoid(this->values[i][j]);
+            Sig.values[i][j] = _Sigmoid(this->values[i][j]);
         }
     }
     return Sig;
 }
 
+Matrix Matrix::SigmoidPrime() {
+    Matrix SigP = Matrix(this->row,this->col);
+    long double sig;
+    for(int i=0; i<this->row; i++) {
+        for(int j=0; j<this->col; j++) {
+            sig = _Sigmoid(this->values[i][j]);
+            SigP.values[i][j] = sig*(1-sig);
+        }
+    }
+    return SigP;
+}
 
 Matrix* randomMatrix(int row, int col) {
     Matrix* randMat = new Matrix(row, col);
@@ -139,3 +175,18 @@ Matrix operator *(long double I, const Matrix &M) {
 }
 
 
+Matrix HadamardProduct(const Matrix &A, const Matrix &B) {
+    if((A.row != B.row) & (A.col != B.col)) {
+        printf("ERROR: Dimensionality Error for HadamrdProduct");
+        exit(EXIT_FAILURE);
+    }
+
+    Matrix H_prod = Matrix(A.row,A.col);
+    for(int i=0; i<A.row;i++) {
+        for(int j=0; j<A.col; j++) {
+            H_prod.values[i][j] = A.values[i][j]*B.values[i][j];
+        }
+    }
+
+    return H_prod;
+}

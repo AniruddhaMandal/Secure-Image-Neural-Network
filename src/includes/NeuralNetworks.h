@@ -11,5 +11,6 @@ class NeuralNetwork {
     Matrix** Biases;
     NeuralNetwork(int* _Layers, int _Length);
     ~NeuralNetwork();
-    Matrix* FeedForward(Matrix* X);
+    Matrix FeedForward(Matrix &X);
+    NeuralNetwork* BackPropagation(Matrix &X, Matrix &Y);
 };

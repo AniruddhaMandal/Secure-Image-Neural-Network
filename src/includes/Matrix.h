@@ -8,17 +8,21 @@ class Matrix {
     int row;
     int col;
     long double **values;
+    Matrix();
     Matrix(int _row, int _col);
     Matrix(const Image &ImageObj);
     ~Matrix();
     void Display();
     Matrix T();
-    Matrix* operator *(const Matrix &mat);
-    Matrix* operator +(const Matrix &mat);
-    Matrix* operator -(const Matrix &mat);
-    Matrix* Sigmoid();
+    Matrix operator *(const Matrix &mat);
+    Matrix operator +(const Matrix &mat);
+    Matrix operator -(const Matrix &mat);
+    Matrix Sigmoid();
+    Matrix SigmoidPrime();
+    void operator =(const Matrix &mat);
 };
 
+Matrix HadamardProduct(const Matrix &A, const Matrix &B);
 
 Matrix operator *(long double I, const Matrix &M);
 
