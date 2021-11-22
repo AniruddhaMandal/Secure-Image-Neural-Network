@@ -21,6 +21,7 @@ class NeuralNetwork {
     
     void StochasticGradientDescent(
         const Data &Datset,
+        const Data &TestData,
         long double LearningRate, 
         int BatchSize, 
         int N_Cycle
@@ -30,6 +31,7 @@ class NeuralNetwork {
 
     private:
     void _Subtract(NeuralNetwork* Net, long double p);
+    void Accuracy(const Data &Dataset);
 };
 
 

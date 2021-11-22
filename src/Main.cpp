@@ -5,11 +5,20 @@
 
 
 int main() {
-    Matrix Y = Matrix(10,1);
-    for(int i=0; i<10; i++) {
-        Y.values[i][0] = 0;
+    
+    const char* test_file_name = "../CIFAR/data_batch_1.bin";
+    FILE* Tfpt;
+    Tfpt = fopen(test_file_name,"rb");
+    if(Tfpt == NULL) { 
+        printf("ERROR:file doesn't exists!");
+        exit(-1);
     }
-    Y.values[6][0] = 1;
+
+
+    Image* Timages = ImRead(Tfpt,10000);
+    Data TestDataset = ImageToData(Timages, 1000);
+    
+    
     
     
     const char* file_name = "../CIFAR/data_batch_1.bin";
@@ -26,11 +35,12 @@ int main() {
 
     int layers[] = {1024,30,40,10};
     NeuralNetwork testNet(layers,4);
-    long double b = testNet.Weights[1]->values[1][1];
-    testNet.StochasticGradientDescent(Dataset,0.01,100,1);
-    long double a = testNet.Weights[1]->values[1][1];
+    long double b = testNet.Weights[0]->values[1][1];
+    testNet.StochasticGradientDescent(Dataset,TestDataset,0.1,100,30);
+    long double a = testNet.Weights[0]->values[1][1];
     printf("%0.20Lf  %0.20Lf\n",a,b);
 
     fclose(fpt);
     delete[] images;
+
 }

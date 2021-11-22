@@ -74,18 +74,22 @@ void NeuralNetwork::UpdateMiniBatch(Matrix** ImagePointer, Matrix** LabelPointer
         delete PointGradient;
     }
     this->_Subtract(BatchGradient,-1);
-    
+    delete BatchGradient;
 }
 
 
-void NeuralNetwork::StochasticGradientDescent(const Data &Dataset, long double LearningRate, int BatchSize, int N_cycle) {
+void NeuralNetwork::StochasticGradientDescent(const Data &Dataset,const Data &TestData, long double LearningRate, int BatchSize, int N_cycle) {
     int N_Batch = Dataset.N_Data/BatchSize;
     Matrix** ImagePointer;
     Matrix** LabelPointer; 
+
+    for(int cy=0; cy<N_cycle; cy++){
     for(int i=0; i<N_Batch; i++) {
-        ImagePointer = Dataset.M_Images+(i*BatchSize);
-        LabelPointer = Dataset.M_Labels+(i*BatchSize);
-        this->UpdateMiniBatch(ImagePointer, LabelPointer, BatchSize,LearningRate);
+            ImagePointer = Dataset.M_Images+(i*BatchSize);
+            LabelPointer = Dataset.M_Labels+(i*BatchSize);
+            this->UpdateMiniBatch(ImagePointer, LabelPointer, BatchSize,LearningRate);
+            this->Accuracy(TestData);
+    }
     }
 }
 
@@ -95,6 +99,19 @@ void NeuralNetwork::_Subtract(NeuralNetwork* Net, long double p) {
         *this->Weights[i] = *this->Weights[i] - p*(*Net->Weights[i]);
         *this->Biases[i] = *this->Biases[i] - p*(*Net->Biases[i]);
     }
+}
+
+
+void NeuralNetwork::Accuracy(const Data &Data) {
+    Matrix prediction;
+    int Sum = 0;
+    for(int i=0;i<Data.N_Data;i++) {
+        prediction = this->FeedForward(*Data.M_Images[i]);
+        Sum += Compare(&prediction,Data.M_Labels[i]);
+    }
+    long double acc = (long double) Sum/Data.N_Data;
+    printf("[%d]: %Lf\n",GLOBAL_COUNTER,acc);
+    GLOBAL_COUNTER++;
 }
 
 

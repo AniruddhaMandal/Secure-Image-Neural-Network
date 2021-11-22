@@ -32,6 +32,8 @@ Matrix* randomMatrix(int row, int col);
 
 Matrix** ImageToMatrix(const Image* ImagesObjs, int N_image);
 
+int Compare(Matrix* A, Matrix* B);
+
 struct Data {
     int N_Data;
     Matrix** M_Images;
@@ -53,5 +55,5 @@ struct Data {
 };
 
 Data ImageToData(const Image* ImageObjs, int N_image);
-
+int GLOBAL_COUNTER;
 #endif 

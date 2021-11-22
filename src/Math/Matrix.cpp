@@ -230,3 +230,27 @@ Data ImageToData(const Image* ImageObjs, int N_image) {
     }
     return _newData;
 }
+
+
+int Compare(Matrix* A, Matrix* B) {
+    if(A->row != B->row || A->col != 1 || B->col != 1){
+        printf("Dimensionality Error: Cannot compare.");
+        exit(EXIT_FAILURE);
+    }
+    int IdMaxA = 0;
+    int IdMaxB = 0;
+    long double MaxA = -100000;
+    long double MaxB = -100000;
+    for(int i=0; i<A->row; i++) {
+        if(A->values[i][0]>MaxA) {
+            IdMaxA = i;
+            MaxA = A->values[i][0];
+        }
+        if(B->values[i][0]>MaxB) {
+            IdMaxB = i;
+            MaxB = B->values[i][0];
+        }
+    }
+        if (IdMaxA == IdMaxB) return 1;
+        else return 0;
+}
