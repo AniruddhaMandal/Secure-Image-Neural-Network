@@ -153,6 +153,16 @@ Matrix Matrix::SigmoidPrime() {
     return SigP;
 }
 
+
+void ZeroMatrix(Matrix* mat) {
+    for(int i=0; i<mat->row;i++) {
+        for(int j=0; j<mat->col; j++) {
+            mat->values[i][j] = 0;
+        }
+    }
+}
+
+
 Matrix* randomMatrix(int row, int col) {
     Matrix* randMat = new Matrix(row, col);
     for(int i=0; i<row; i++) {
@@ -189,4 +199,34 @@ Matrix HadamardProduct(const Matrix &A, const Matrix &B) {
     }
 
     return H_prod;
+}
+
+
+Matrix** ImageToMatrix(const Image* ImageObjs, int N_image) {
+    Matrix** M_Images = new Matrix*[N_image];
+    for(int i=0; i<N_image;i++) {
+        M_Images[i] = new Matrix(ImageObjs[i]);
+    }
+    return M_Images;
+}
+
+
+Data ImageToData(const Image* ImageObjs, int N_image) {
+    //Enter number of image class as a variable insted of hard coding 10.
+    Data _newData(N_image);
+    
+    _newData.M_Labels = new Matrix*[N_image];
+    for(int i=0; i<N_image; i++) {
+        _newData.M_Labels[i] = new Matrix(10,1);
+        for(int j=0; j<10; j++) {
+            if(j == ImageObjs[i].label) _newData.M_Labels[i]->values[j][0] = 1;
+            else _newData.M_Labels[i]->values[j][0] = 0;
+        }
+    }
+
+    _newData.M_Images = new Matrix*[N_image];
+    for(int i=0; i<N_image; i++) {
+        _newData.M_Images[i] = new Matrix(ImageObjs[i]);
+    }
+    return _newData;
 }

@@ -63,3 +63,46 @@ NeuralNetwork* NeuralNetwork::BackPropagation(Matrix &X, Matrix &Y) {
     }
     return GradNet;
 }
+
+void NeuralNetwork::UpdateMiniBatch(Matrix** ImagePointer, Matrix** LabelPointer, int BatchSize, long double LearningRate){
+    NeuralNetwork* BatchGradient = ZeroNeuralNetwork(this->Layers,this->Length); 
+    NeuralNetwork* PointGradient;
+    long double P = LearningRate/BatchSize;
+    for(int i=0; i<BatchSize; i++) {
+        PointGradient = this->BackPropagation(*ImagePointer[i],*LabelPointer[i]);
+        BatchGradient->_Subtract(PointGradient, P);
+        delete PointGradient;
+    }
+    this->_Subtract(BatchGradient,-1);
+    
+}
+
+
+void NeuralNetwork::StochasticGradientDescent(const Data &Dataset, long double LearningRate, int BatchSize, int N_cycle) {
+    int N_Batch = Dataset.N_Data/BatchSize;
+    Matrix** ImagePointer;
+    Matrix** LabelPointer; 
+    for(int i=0; i<N_Batch; i++) {
+        ImagePointer = Dataset.M_Images+(i*BatchSize);
+        LabelPointer = Dataset.M_Labels+(i*BatchSize);
+        this->UpdateMiniBatch(ImagePointer, LabelPointer, BatchSize,LearningRate);
+    }
+}
+
+
+void NeuralNetwork::_Subtract(NeuralNetwork* Net, long double p) {
+    for(int i=0; i<this->Length-1; i++) {
+        *this->Weights[i] = *this->Weights[i] - p*(*Net->Weights[i]);
+        *this->Biases[i] = *this->Biases[i] - p*(*Net->Biases[i]);
+    }
+}
+
+
+NeuralNetwork* ZeroNeuralNetwork(int* _layers, int _length) {
+        NeuralNetwork* zeroNet = new NeuralNetwork(_layers, _length);
+        for(int i=0; i<_length-1;i++) {
+            ZeroMatrix(zeroNet->Weights[i]);
+            ZeroMatrix(zeroNet->Biases[i]);
+        } 
+        return zeroNet;
+}

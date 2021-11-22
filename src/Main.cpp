@@ -22,20 +22,15 @@ int main() {
 
 
     Image* images = ImRead(fpt,10000);
-    Matrix* X = new Matrix(images[0]);
-
+    Data Dataset = ImageToData(images, 1000);
 
     int layers[] = {1024,30,40,10};
     NeuralNetwork testNet(layers,4);
-    Matrix A = Matrix(1,1); 
-    A = testNet.FeedForward(*X);
-    A.Display();
-    NeuralNetwork* GradNet = testNet.BackPropagation(*X, Y);
-    GradNet->Weights[1]->Display();
-    
+    long double b = testNet.Weights[1]->values[1][1];
+    testNet.StochasticGradientDescent(Dataset,0.01,100,1);
+    long double a = testNet.Weights[1]->values[1][1];
+    printf("%0.20Lf  %0.20Lf\n",a,b);
+
     fclose(fpt);
-    delete X;
     delete[] images;
-
-
 }
