@@ -53,7 +53,7 @@ NeuralNetwork* NeuralNetwork::BackPropagation(Matrix &X, Matrix &Y) {
     }
 
     NeuralNetwork* GradNet = new NeuralNetwork(this->Layers,this->Length);
-    Matrix A_grad = (A - Y);
+    Matrix A_grad = 0.5*(A - Y);
     Matrix Z_grad;
     for(int i=this->Length-2; i>=0; i--) {
         Z_grad = HadamardProduct(A_grad,(ActivationVectors[i].SigmoidPrime())); 
@@ -110,7 +110,7 @@ void NeuralNetwork::Accuracy(const Data &Data) {
         Sum += Compare(&prediction,Data.M_Labels[i]);
     }
     long double acc = (long double) Sum/Data.N_Data;
-    printf("[%d]: %Lf\n",GLOBAL_COUNTER,acc);
+    printf("[%d]: %.10Lf\n",GLOBAL_COUNTER,acc);
     GLOBAL_COUNTER++;
 }
 

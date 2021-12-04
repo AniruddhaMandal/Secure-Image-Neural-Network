@@ -31,12 +31,12 @@ int main() {
 
 
     Image* images = ImRead(fpt,10000);
-    Data Dataset = ImageToData(images, 1000);
+    Data Dataset = ImageToData(images, 10000);
 
-    int layers[] = {1024,30,40,10};
+    int layers[] = {1024,130,40,10};
     NeuralNetwork testNet(layers,4);
     long double b = testNet.Weights[0]->values[1][1];
-    testNet.StochasticGradientDescent(Dataset,TestDataset,0.1,100,30);
+    testNet.StochasticGradientDescent(Dataset,TestDataset,0.01,100,30);
     long double a = testNet.Weights[0]->values[1][1];
     printf("%0.20Lf  %0.20Lf\n",a,b);
 
