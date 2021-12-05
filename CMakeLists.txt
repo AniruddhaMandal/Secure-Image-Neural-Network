@@ -26,3 +26,6 @@ target_include_directories(ImRead PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/includ
 
 add_library(NeuralNetworks SHARED "${CMAKE_CURRENT_SOURCE_DIR}/src/NeuralNetworks/NeuralNetworks.cpp")
 target_include_directories(NeuralNetworks PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/includes/")
+
+add_library(Encryption SHARED "${CMAKE_CURRENT_SOURCE_DIR}/src/Encryption/EncryptionAlgorithm.cpp")
+target_include_directories(Encryption PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/includes/")

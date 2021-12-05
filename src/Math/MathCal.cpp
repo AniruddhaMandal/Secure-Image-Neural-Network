@@ -4,6 +4,7 @@
 
 
 long double Seed = 42.3423l;
+int SeedInt = 2342;
 long double randomNumber(long double min, long double max) {
     time_t timer;
     time(&timer);
@@ -16,4 +17,12 @@ long double _Sigmoid(long double Z) {
     Z = exp(-Z); 
     Z = 1/(1+Z);
     return Z;   
+}
+
+int randomInt(int min, int max){ 
+    time_t timer;
+    time(&timer);
+    SeedInt = timer*SeedInt;
+    SeedInt = (SeedInt%(max-min))+min;
+    return SeedInt;
 }
