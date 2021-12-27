@@ -22,5 +22,8 @@ class Image {
     } 
 };
 
+/**
+ * Reads the image
+*/
 Image* ImRead(FILE* fpt, int N_Image);
 uint8_t** ImProcess(Image* ImageObjs, int N_Image);
