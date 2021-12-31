@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 #include<Matrix.h>
 #include<MathCal.h>
 #include<ImRead.h>
@@ -18,14 +19,17 @@ Matrix::Matrix(int _row, int _col) {
     }
 }
 
-
+/**
+ * Converts Image into a Matrix type of grayscale image.
+ * And it scales the pixel values down to [0,1].
+*/
 Matrix::Matrix(const Image &ImageObj) {
     this->row = 1024;
     this->col = 1;
     this->values = new long double*[this->row];
     for(int i=0; i<this->row; i++) {
         this->values[i] = new long double[this->col];
-        this->values[i][0] = (ImageObj.Blue[i]/3 + ImageObj.Green[i]/3 + ImageObj.Red[i]/3);
+        this->values[i][0] = ((long double)(ImageObj.Blue[i]/3 + ImageObj.Green[i]/3 + ImageObj.Red[i]/3))/255;
     }
 }
 
@@ -40,14 +44,34 @@ Matrix::~Matrix() {
 
 
 void Matrix::Display() {
-
+    std::cout<<"["<<std::endl;
     for(int i=0; i<this->row; i++) {
+            std::cout<<"[";
             for(int j=0; j<this->col; j++) {
                 printf("%.20Lf ", this->values[i][j]);
             }
-            std::cout<<std::endl;
+            std::cout<<"]"<<std::endl;
         }
+        std::cout<<"]\n";
     printf("Shape:(%d,%d)\n",this->row,this->col);
+}
+
+
+void Matrix::MatrixToCsv(const char* fileName) {
+    printf("Writing to: %s\n",fileName);
+    FILE* fpt = fopen(fileName,"w");
+    if(fpt==NULL) {
+        printf("[ERROR]: Failed to open file: %s", fileName);
+        exit(EXIT_FAILURE);
+    }
+
+    for(int row=0;row<this->row;row++) {
+        for(int col=0; col<this->col;col++) {
+            fprintf(fpt,"%.20Lf,",this->values[row][col]);
+        }
+        fprintf(fpt,"\n");
+    }
+    fclose(fpt);
 }
 
 

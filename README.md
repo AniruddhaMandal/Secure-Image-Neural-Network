@@ -4,3 +4,9 @@ Train neural network with the encrypted data. This repository is supposed to con
 
 ## Building The Project
 Please use **cmake** to compile the project. It would create a bunch of dynamically linkable libraries along with the main file (which is for testing purposes). 
+
+## To Do:
+1. Identify why it is not learning.
+2. Fix the learning issue.
+3. Complete the encryption algorithm.
+4. (Possibly ) add a network visualization tool.

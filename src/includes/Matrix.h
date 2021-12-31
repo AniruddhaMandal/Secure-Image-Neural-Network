@@ -34,6 +34,11 @@ class Matrix {
     */
     void Display();
   
+    /**
+     * Prints Matrix into a csv file.
+    */
+    void MatrixToCsv(const char* fileName);
+
   /** Returns the Transpose of the target matrix.
     * May cause memory leak as, it does not delete
     * the original instance. 

@@ -43,6 +43,12 @@ class NeuralNetwork {
 
     void UpdateMiniBatch(Matrix** ImagePointer, Matrix** LabelPointer, int BatchSize, long double LearningRate);
 
+    /**
+     * Saves Neural Network into a csv files. Provide a 
+     * folder to save weights into in.
+    */
+   void NetToCsv(const char* dir);
+
     private:
     /**
      * Substracts scaler(long double `p`) multiple of

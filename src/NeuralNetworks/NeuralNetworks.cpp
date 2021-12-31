@@ -1,5 +1,7 @@
 #include<NeuralNetworks.h>
 #include<iostream>
+#include<sys/stat.h>
+#include<sys/types.h>
 
 NeuralNetwork::NeuralNetwork(int* _Layers, int _Length) {
     this->Layers = _Layers;
@@ -77,7 +79,11 @@ void NeuralNetwork::UpdateMiniBatch(Matrix** ImagePointer, Matrix** LabelPointer
     delete BatchGradient;
 }
 
-
+/**
+ * Breaks data into chunks and applies `UpdateMiniBatch`.
+ * This process is repeted `N_cycle` times. Before `UpdateMiniBatch`
+ * Label and images are broken separately.
+*/
 void NeuralNetwork::StochasticGradientDescent(const Data &Dataset,const Data &TestData, long double LearningRate, int BatchSize, int N_cycle) {
     int N_Batch = Dataset.N_Data/BatchSize;
     Matrix** ImagePointer;
@@ -112,6 +118,18 @@ void NeuralNetwork::Accuracy(const Data &Data) {
     long double acc = (long double) Sum/Data.N_Data;
     printf("[%d]: %.10Lf\n",GLOBAL_COUNTER,acc);
     GLOBAL_COUNTER++;
+}
+
+void NeuralNetwork::NetToCsv(const char* dir) {
+    printf("Writing to: %s\n",dir);
+    mkdir(dir,0777);
+    char fileName[100];
+    for(int l=0; l<this->Length-1;l++) {
+        sprintf(fileName,"%s/weight_%d.csv",dir,l);
+        this->Weights[l]->MatrixToCsv(fileName);
+        sprintf(fileName,"%s/biases_%d.csv",dir,l);
+        this->Biases[l]->MatrixToCsv(fileName);
+    }
 }
 
 

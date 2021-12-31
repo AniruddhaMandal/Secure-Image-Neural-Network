@@ -4,6 +4,11 @@
 
 #pragma once
 
+/**
+ * Image class consists of 4 elements.
+ * The label of the object and R,G,B
+ * pixeles of the image.
+*/
 class Image {
     public:
     uint8_t label;
@@ -23,7 +28,12 @@ class Image {
 };
 
 /**
- * Reads the image
+ * Reads the images and converts into image object.
 */
 Image* ImRead(FILE* fpt, int N_Image);
+
+/**
+ * Converts image object into a grayscale object.
+ * Labels are lost in this process.
+*/
 uint8_t** ImProcess(Image* ImageObjs, int N_Image);

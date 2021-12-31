@@ -35,12 +35,18 @@ int main() {
 
     int layers[] = {1024,130,40,10};
     NeuralNetwork testNet(layers,4);
-    long double b = testNet.Weights[0]->values[1][1];
-    testNet.StochasticGradientDescent(Dataset,TestDataset,0.01,100,30);
-    long double a = testNet.Weights[0]->values[1][1];
-    printf("%0.20Lf  %0.20Lf\n",a,b);
+    
+    NeuralNetwork* gradNet = testNet.BackPropagation(*(Dataset.M_Images[1]),*(Dataset.M_Labels[1]));
+    const char *dir = "gradNet"; 
+    gradNet->NetToCsv(dir);
+    dir = "testNet";
+    testNet.NetToCsv(dir);
+    printf("Output of Net:");
+    testNet.FeedForward(*(Dataset.M_Images[1])).Display();
+    printf("Acctual Label:");
+    Dataset.M_Labels[1]->Display();
 
     fclose(fpt);
     delete[] images;
-
+    delete gradNet;
 }
