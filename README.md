@@ -10,3 +10,4 @@ Please use **cmake** to compile the project. It would create a bunch of dynamica
 2. Fix the learning issue.
 3. Complete the encryption algorithm.
 4. (Possibly ) add a network visualization tool.
+5. Why sometimes the gradient of the weights of the first layer is zero (completely zero :raised_eyebrow:)
