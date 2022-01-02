@@ -69,6 +69,7 @@ void Matrix::MatrixToCsv(const char* fileName) {
         for(int col=0; col<this->col;col++) {
             fprintf(fpt,"%.20Lf,",this->values[row][col]);
         }
+        fseek(fpt,-1L,SEEK_CUR);
         fprintf(fpt,"\n");
     }
     fclose(fpt);

@@ -4,10 +4,16 @@ Train neural network with the encrypted data. This repository is supposed to con
 
 ## Building The Project
 Please use **cmake** to compile the project. It would create a bunch of dynamically linkable libraries along with the main file (which is for testing purposes). 
+### Note: 
+Include MathCal.h in the main file as it contains the initial seeds. Otherwise generated random numbers inside the random matrix would have same sign for all. Due to this reason the model would not learn.
 
 ## To Do:
 1. Identify why it is not learning.
 2. Fix the learning issue.
 3. Complete the encryption algorithm.
 4. (Possibly ) add a network visualization tool.
-5. Why sometimes the gradient of the weights of the first layer is zero (completely zero :raised_eyebrow:)
+5. Verify whether the _Accuracy function is working as expected.
+6. Verify whether Matrix operations are working as expected. :heavy_check_mark: 
+7. Verify whether BackPropagation is working properly. (Confirm any calculation or overflow error)
+8. Parallelize NeuralNetwork (possibily with pthread or fork).
+9. Solve any memory issues.
