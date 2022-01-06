@@ -1,4 +1,5 @@
 #include<iostream>
+#include<math.h>
 #include<fstream>
 #include<Matrix.h>
 #include<MathCal.h>
@@ -61,7 +62,7 @@ void Matrix::MatrixToCsv(const char* fileName) {
     printf("Writing to: %s\n",fileName);
     FILE* fpt = fopen(fileName,"w");
     if(fpt==NULL) {
-        printf("[ERROR]: Failed to open file: %s", fileName);
+        printf("[ERROR]: Failed to open file: %s\n", fileName);
         exit(EXIT_FAILURE);
     }
 
@@ -278,4 +279,19 @@ int Compare(Matrix* A, Matrix* B) {
     }
         if (IdMaxA == IdMaxB) return 1;
         else return 0;
+}
+
+long double MeanSquare(Matrix* A, Matrix* B) {
+    if((A->row != B->row) || (A->col != B->col)) {
+        std::cout<<"[ERROR]: RootMeanSquare: Dimensionality Error"<<std::endl;
+        exit(EXIT_FAILURE);
+    }
+    long double sum = 0;
+    for(int row = 0; row<A->row;row++) {
+        for(int col=0;col<A->col;col++) {
+            sum += (A->values[row][col]-B->values[row][col])*(A->values[row][col]-B->values[row][col]);
+        }
+    }
+    sum = sqrt(sum);
+    return sum;
 }

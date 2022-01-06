@@ -6,6 +6,5 @@
 #include<Tests.h>
 
 int main(){
-    TestFeedforward();
-    TestMatrix();
+    TestNeuralNet();
 }

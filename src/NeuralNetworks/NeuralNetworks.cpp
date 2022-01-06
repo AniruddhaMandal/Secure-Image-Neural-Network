@@ -1,7 +1,8 @@
-#include<NeuralNetworks.h>
 #include<iostream>
+#include<math.h>
 #include<sys/stat.h>
 #include<sys/types.h>
+#include<NeuralNetworks.h>
 
 NeuralNetwork::NeuralNetwork(int* _Layers, int _Length) {
     this->Layers = _Layers;
@@ -76,6 +77,12 @@ void NeuralNetwork::UpdateMiniBatch(Matrix** ImagePointer, Matrix** LabelPointer
         delete PointGradient;
     }
     this->_Subtract(BatchGradient,-1);
+    // Debug purpose
+    char fileName[100];
+    mkdir("../DEBUG/",0777);
+    sprintf(fileName,"../DEBUG/net%d",GLOBAL_COUNTER);
+    BatchGradient->NetToCsv(fileName);
+    // End Debug purpose
     delete BatchGradient;
 }
 
@@ -111,12 +118,15 @@ void NeuralNetwork::_Subtract(NeuralNetwork* Net, long double p) {
 void NeuralNetwork::Accuracy(const Data &Data) {
     Matrix prediction;
     int Sum = 0;
+    long double RMS = 0;
     for(int i=0;i<Data.N_Data;i++) {
         prediction = this->FeedForward(*Data.M_Images[i]);
         Sum += Compare(&prediction,Data.M_Labels[i]);
+        RMS += MeanSquare(&prediction, Data.M_Labels[i])/Data.N_Data;
     }
     long double acc = (long double) Sum/Data.N_Data;
     printf("[%d]: %.10Lf\n",GLOBAL_COUNTER,acc);
+    printf("RMS: %Lf\n\n", sqrt(RMS));
     GLOBAL_COUNTER++;
 }
 

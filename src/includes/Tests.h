@@ -6,17 +6,6 @@
 
 void TestFeedforward() {
     
-    const char* test_file_name = "../CIFAR/data_batch_1.bin";
-    FILE* Tfpt;
-    Tfpt = fopen(test_file_name,"rb");
-    if(Tfpt == NULL) { 
-        printf("ERROR:file doesn't exists!");
-        exit(-1);
-    }
-
-    Image* Timages = ImRead(Tfpt,10000);
-    Data TestDataset = ImageToData(Timages, 1000);
-    
     const char* file_name = "../CIFAR/data_batch_1.bin";
     FILE* fpt;
     fpt = fopen(file_name,"rb");
@@ -85,4 +74,54 @@ void TestMatrix()
     delete B;
     delete C;
     delete D;
+}
+
+void TestAccuracy() {
+    const char* file_name = "../CIFAR/data_batch_1.bin";
+    FILE* fpt = fopen(file_name,"rb");
+    Image* testImage = ImRead(fpt,1);
+    Data testData = ImageToData(testImage,1);
+    testData.M_Labels[0]->Display();
+    Matrix* A = testData.M_Labels[0];
+    Matrix B = Matrix(10,1);
+    ZeroMatrix(&B);
+
+    if((Compare(A, A) == 1) && (Compare(A,&B) == 0)){
+    std::cout<<"Compare function Passed Test."<<std::endl;
+    }
+    else {
+        std::cout<<"Compare function Failed Test."<<std::endl;
+    }
+    
+}
+
+void TestNeuralNet() {
+        
+    const char* test_file_name = "../CIFAR/data_batch_2.bin";
+    FILE* Tfpt;
+    Tfpt = fopen(test_file_name,"rb");
+    if(Tfpt == NULL) { 
+        printf("ERROR:file doesn't exists!");
+        exit(-1);
+    }
+
+    Image* Timages = ImRead(Tfpt,10000);
+    Data TestDataset = ImageToData(Timages, 1000);
+
+    const char* file_name = "../CIFAR/data_batch_1.bin";
+    FILE* fpt;
+    fpt = fopen(file_name,"rb");
+    if(fpt==NULL) {
+        printf("[ERROR]: Cannot open %s\nNo such file exists.", file_name);
+        exit(EXIT_FAILURE);
+    }
+
+    Image* trainImages = ImRead(fpt, 10000);
+    Data trainDataset = ImageToData(trainImages, 10000);
+
+    int layers[] = {1024,130,40,10};
+    NeuralNetwork testNet = NeuralNetwork(layers,4);
+    testNet.NetToCsv("../DEBUG/testNet");
+    testNet.StochasticGradientDescent(trainDataset,TestDataset,0.5,100,3);
+
 }

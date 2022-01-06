@@ -141,6 +141,12 @@ Matrix** ImageToMatrix(const Image* ImagesObjs, int N_image);
 */
 int Compare(Matrix* A, Matrix* B);
 
+/**
+ * Finds the square of Eucidian distance between two 
+ * points. Mathematical Form:
+ * MS = sum{(a[i]-b[i])^2}.
+*/
+long double MeanSquare(Matrix* A, Matrix* B) ;
 
 /**
  * Input data type for NeuralNetwork object.
