@@ -193,7 +193,7 @@ Matrix* randomMatrix(int row, int col) {
     Matrix* randMat = new Matrix(row, col);
     for(int i=0; i<row; i++) {
         for(int j=0; j<col; j++) {
-            randMat->values[i][j] = randomNumber(0l,1l);
+            randMat->values[i][j] = randomNumber(-1l,1l);
         }
     }
     return randMat;

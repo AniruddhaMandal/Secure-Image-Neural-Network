@@ -125,3 +125,19 @@ void TestNeuralNet() {
     testNet.StochasticGradientDescent(trainDataset,TestDataset,0.5,100,3);
 
 }
+
+void TestRandomNumber() {
+    const char* fileName = "testRandomNumber.csv";
+    FILE* fpt = fopen(fileName,"w"); 
+    if(fpt == NULL) {
+        printf("Faild to write on: %s\n",fileName);
+        exit(EXIT_FAILURE);
+    }
+    printf("Writing to: %s\n",fileName);
+    for(int i=0;i<40000;i++) {
+        fprintf(fpt,"%Lf, ",randomNumber(-1,1));
+    }
+    fseek(fpt,-2L,SEEK_CUR);
+    fprintf(fpt,"\n");
+    fclose(fpt);
+}

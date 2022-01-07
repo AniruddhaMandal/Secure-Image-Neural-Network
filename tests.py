@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt 
 
 # product test
 A = np.genfromtxt("DEBUG/A.csv",delimiter=",")
@@ -20,3 +21,9 @@ sig = np.genfromtxt("DEBUG/sig.csv",delimiter=",")
 
 np_sig = 1/(1+np.exp(-D))
 print("sigmoid test: ",np.allclose(sig,np_sig))
+
+# random number generator test
+randomArray = np.genfromtxt("build/testRandomNumber.csv",delimiter=",")
+y,x = np.histogram(randomArray,100);
+plt.bar(x[1:], y,width=0.01)
+plt.show()

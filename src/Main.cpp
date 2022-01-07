@@ -6,5 +6,8 @@
 #include<Tests.h>
 
 int main(){
-    TestNeuralNet();
+    TestAccuracy();
+    TestFeedforward();
+    TestMatrix();
+    TestRandomNumber();
 }
