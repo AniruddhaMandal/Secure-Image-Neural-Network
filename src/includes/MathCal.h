@@ -1,6 +1,11 @@
 #pragma once
 
 /**
+ * Initializes the seed for random number generator
+*/
+void randInit();
+
+/**
  * Geneters a random number (long double) with in
  * the interval of [min, max]. Generates the number
  * from a uniform distribution. Uses time as seed. 
@@ -13,7 +18,7 @@ long double randomNumber(long double min, long double max);
 long double _Sigmoid(long double Z);
 
 /**
- * Random integer generator from a given range.
+ * Random integer generator from a given range(both inclusive).
  * Generates number from uniform distribution.
 */
-int randomInt(int min, int max);
+long int randomInt(long int min, long int max);

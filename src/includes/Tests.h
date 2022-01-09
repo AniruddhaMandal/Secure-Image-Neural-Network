@@ -117,12 +117,12 @@ void TestNeuralNet() {
     }
 
     Image* trainImages = ImRead(fpt, 10000);
-    Data trainDataset = ImageToData(trainImages, 10000);
+    Data trainDataset = ImageToData(trainImages, 10);
 
     int layers[] = {1024,130,40,10};
     NeuralNetwork testNet = NeuralNetwork(layers,4);
     testNet.NetToCsv("../DEBUG/testNet");
-    testNet.StochasticGradientDescent(trainDataset,TestDataset,0.5,100,3);
+    testNet.StochasticGradientDescent(trainDataset,TestDataset,0.5,10,3);
 
 }
 

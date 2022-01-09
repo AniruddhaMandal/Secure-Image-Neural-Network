@@ -1,26 +1,38 @@
 #include<MathCal.h>
+#include<time.h>
+#include<math.h>
 #include<iostream>
-#include<random>
 
+long int SEED = 0;
+long int randomCoA = 23423;
+long int randomCoB = 7673;
+
+
+void randInit() {
+    time(&SEED);
+}
 
 long double randomNumber(long double min, long double max) {
-    long long L = 99999999999999;
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<long long> dist(0,L);
-    long double factor = (long double) dist(gen)/L;
-    return (min + (max-min) * factor);
+    long double range = max-min;
+    long int big = 99999999999999;
+    return min + range*((long double) randomInt(0,big)/big);
 }
 
 long double _Sigmoid(long double Z) {
-    Z = exp(-Z); 
+    Z = exp(-Z);
     Z = 1/(1+Z);
-    return Z;   
+    return Z;
 }
 
-int randomInt(int min, int max){ 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> dist(min,max);
-    return dist(gen);
+long int randomInt(long int min, long int max){
+    if(SEED == 0) {
+        randInit();
+    }
+    long int range = max-min+1;
+    SEED = randomCoA*SEED + randomCoB;   
+    long int rand = SEED%range;
+    if(rand<0) {
+        rand = -1*rand;
+    }
+    return rand + min;
 }
