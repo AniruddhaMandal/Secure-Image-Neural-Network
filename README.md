@@ -19,7 +19,7 @@ Include MathCal.h in the main file as it contains the initial seeds. Otherwise g
 7. Verify whether BackPropagation is working properly. (Confirm any calculation or overflow error)
 8. Parallelize NeuralNetwork (possibily with pthread or fork).
 9. Solve any memory issues.
-10. Change Random Number Generator.
+10. Change Random Number Generator. :heavy_check_mark:
 11. Investigate why learning is being stoped after some steps.
 
 ## Problems:

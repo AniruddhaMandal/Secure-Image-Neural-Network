@@ -4,6 +4,8 @@
 #include<Matrix.h>
 #include<MathCal.h>
 #include<ImRead.h>
+#include<omp.h>
+
 
 Matrix::Matrix() {
     this->row = 1;
@@ -79,10 +81,15 @@ void Matrix::MatrixToCsv(const char* fileName) {
 
 Matrix Matrix::T() {
 	Matrix T_matrix = Matrix(this->col, this->row);
-    for(int i=0; i<this->row; i++)	{
-        for(int j=0; j<this->col;j++) {
+    int i,j;
+    #pragma omp parallel shared(T_matrix) private(i,j)
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<this->row; i++)	{
+        for(j=0; j<this->col;j++) {
             T_matrix.values[j][i] = this->values[i][j];
         }
+    }
     }
     return T_matrix;
 }
@@ -95,14 +102,19 @@ Matrix Matrix::operator*(const Matrix &Obj) {
     }
     Matrix Product = Matrix(this->row, Obj.col);
     long double sum;
-    for(int row=0; row<this->row; row++) {
-        for(int col=0; col<Obj.col; col++) {
+    int row,col,i;
+    #pragma omp parallel shared(Obj,Product) private(row,col,sum,i)
+    {
+    #pragma omp for schedule(static)
+    for(row=0; row<this->row; row++) {
+        for(col=0; col<Obj.col; col++) {
             sum = 0;
-            for(int i=0; i<this->col; i++) {
+            for(i=0; i<this->col; i++) {
                 sum += (this->values[row][i])*(Obj.values[i][col]);
             }
             Product.values[row][col] = sum;
         }
+    }
     } 
     return Product;
 }
@@ -113,11 +125,16 @@ Matrix Matrix::operator+(const Matrix &Obj) {
         std::cout<<"Dimension Not Compatable. ("<<this->row<<","<<this->col<<") != ("<<Obj.row<<", "<<Obj.col<<")"<<std::endl;
         exit(EXIT_FAILURE);
     }
+    int i,j;
     Matrix Sum = Matrix(this->row, this->col);
-    for(int i=0; i<this->row; i++) {
-        for(int j=0; j<this->col; j++) {
+    #pragma omp parallel shared(Obj, Sum) private(i,j) 
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<this->row; i++) {
+        for(j=0; j<this->col; j++) {
             Sum.values[i][j] = this->values[i][j] + Obj.values[i][j];
         }
+    }
     }
     return Sum;
 }
@@ -128,11 +145,16 @@ Matrix Matrix::operator-(const Matrix &Obj) {
         std::cout<<"Dimension Not Compatable. ("<<this->row<<","<<this->col<<") != ("<<Obj.row<<", "<<Obj.col<<")"<<std::endl;
         exit(EXIT_FAILURE);
     }
+    int i,j;
     Matrix Sub = Matrix(this->row, this->col);
-    for(int i=0; i<this->row; i++) {
-        for(int j=0; j<this->col; j++) {
+    #pragma omp parallel shared(Sub, Obj) private(i,j)
+    {
+        #pragma omp for schedule(static)
+    for(i=0; i<this->row; i++) {
+        for(j=0; j<this->col; j++) {
             Sub.values[i][j] = this->values[i][j] - Obj.values[i][j];
         }
+    }
     }
     return Sub;
 }
@@ -148,11 +170,16 @@ void Matrix::operator=(const Matrix &Obj) {
     this->row = Obj.row;
     this->col = Obj.col;
     this->values = new long double*[Obj.row];
-    for(int i=0; i<Obj.row;i++) {
+    int i,j;
+    #pragma omp parallel shared(Obj) private(i,j)
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<Obj.row;i++) {
         this->values[i] = new long double[Obj.col];
-        for(int j=0; j<Obj.col; j++) {
+        for(j=0; j<Obj.col; j++) {
             this->values[i][j] = Obj.values[i][j];
         }
+    }
     }
 }
 
