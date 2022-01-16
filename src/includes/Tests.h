@@ -141,3 +141,27 @@ void TestRandomNumber() {
     fprintf(fpt,"\n");
     fclose(fpt);
 }
+
+void TestLoadMatrix() {
+    Matrix* M = randomMatrix(21,23);
+    M->MatrixToCsv("../DEBUG/loadMatrix.csv");
+    Matrix* N = LoadMatrix("../DEBUG/loadMatrix.csv");
+    if(M->row != N->row) {
+        printf("[FAILED]: LoadMatrix function. (Dimension not equal)");
+        return;
+    }
+    if(M->col != N->col) {
+        printf("[FAILED]: LoadMatrix function. (Dimension not equal)");
+        return;
+    }
+    for(int i=0;i<M->row;i++) {
+        for(int j=0;j<M->row;j++) {
+            if((M->values[i][j] - N->values[i][j])>0.00000000000000000001) {
+                printf("%.20Lf != %.20Lf\n",M->values[i][j],N->values[i][j]);
+                printf("[FAILED]: LoadMatrix function.\n");
+                return;
+            }
+        }
+    }
+    printf("[PASSED]: LoadMatrix function.\n");
+}

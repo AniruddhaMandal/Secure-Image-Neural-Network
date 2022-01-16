@@ -121,6 +121,14 @@ void ZeroMatrix(Matrix* mat);
 Matrix* randomMatrix(int row, int col);
 
 /**
+ * Loads Matrix from a .csv file. Takes file
+ * path as an argument and returns a pointer
+ * to the Matrix. Rows are seperated by new 
+ * line and columns are separate by `,`.
+*/
+Matrix* LoadMatrix(const char* fileName);
+
+/**
  * Convertes the Image objects into Matrices.
  * Arguments: Pointer to the array of image 
  * objects and number of images in the array.

@@ -1,4 +1,5 @@
 #include<iostream>
+#include<dirent.h>
 #include<math.h>
 #include<sys/stat.h>
 #include<sys/types.h>
@@ -15,6 +16,9 @@ NeuralNetwork::NeuralNetwork(int* _Layers, int _Length) {
     }
 }
 
+// Default constructor
+NeuralNetwork::NeuralNetwork() {
+}
 
 NeuralNetwork::~NeuralNetwork() {
     for(int i=0; i<this->Length-1;i++) {
@@ -140,6 +144,56 @@ void NeuralNetwork::NetToCsv(const char* dir) {
         sprintf(fileName,"%s/biases_%d.csv",dir,l);
         this->Biases[l]->MatrixToCsv(fileName);
     }
+}
+
+
+void NeuralNetwork::SaveModel(const char* dir) {
+    this->NetToCsv(dir);
+}
+
+
+NeuralNetwork* LoadModel(const char* dir) {
+    dirent* dirEntry;
+    int length = 0;
+    DIR* modelDir = opendir(dir);
+    if(modelDir == NULL) {
+        printf("[ERROR]: Folder does not exists.");
+    }
+    // Computing number of layers in the target neural net by computing number 
+    // of files in the directory. As if there is n layers there will be 2(n-1) 
+    // files, i.e. weight and biases for each layer other than the first layer.
+    // Each directory has 2 extra files ( '.' and '..') other than the weights 
+    // and biases. So, to compute number of layers for the target neural net we
+    // simply count number of files in each directory and divide it by 2.
+    while((dirEntry = readdir(modelDir)) != NULL) {
+        length++;
+    }
+    length = length/2;
+    int* layers = new int[length];
+    Matrix** weights = new Matrix*[length-1];
+    Matrix** biases = new Matrix*[length-1];
+
+    for(int l=0;l<length-1;l++) {
+        char fileName[100];
+        sprintf(fileName,"%s/weight_%d.csv",dir,l);
+        Matrix* w = LoadMatrix(fileName);
+        weights[l] = w;
+        sprintf(fileName,"%s/biases_%d.csv",dir,l);
+        Matrix* b = LoadMatrix(fileName);
+        biases[l] = b;
+        layers[l] = w->col;
+        layers[l+1] = w->row;
+
+    }
+    // Creating target Neural Network
+    NeuralNetwork* network = new NeuralNetwork;
+    network->Length = length;
+    network->Layers = layers;
+    network->Weights = weights;
+    network->Biases = biases;
+    
+    closedir(modelDir);
+    return network;
 }
 
 

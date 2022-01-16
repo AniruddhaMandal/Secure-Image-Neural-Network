@@ -11,4 +11,5 @@ int main(){
     TestFeedforward();
     TestMatrix();
     TestRandomNumber();
+    TestLoadMatrix();
 }

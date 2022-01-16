@@ -27,6 +27,9 @@ class NeuralNetwork {
     */
     NeuralNetwork(int* _Layers, int _Length);
     
+    // Default constructor
+    NeuralNetwork();
+
     ~NeuralNetwork();
 
     Matrix FeedForward(Matrix &X);
@@ -49,6 +52,14 @@ class NeuralNetwork {
     */
    void NetToCsv(const char* dir);
 
+   /**
+    * Saves the model into a direcotry. Weights and
+    * biases are saved into .csv files into the
+    * direcotry. Uses the NetToCsv under the hood.
+   */
+   void SaveModel(const char* dir);
+
+
     private:
     /**
      * Substracts scaler(long double `p`) multiple of
@@ -67,3 +78,12 @@ class NeuralNetwork {
  * Generates a NerualNetwork with weights and biases as 0.
 */
 NeuralNetwork* ZeroNeuralNetwork(int* _layers, int _length);
+
+/**
+ * Provide the direcotry path where the model is saved. Direcotry
+ * schould contain only weights and biases in a .csv format. Nameing 
+ * convaintion for each weight and biases should be of the form 
+ * weight_n.csv and biases_n.csv respectively, where n is the number
+ * of layer correcponding to the weight and biases.
+*/
+NeuralNetwork* LoadModel(const char* dir);

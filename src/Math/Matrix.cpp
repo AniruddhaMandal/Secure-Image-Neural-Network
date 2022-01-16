@@ -216,6 +216,67 @@ void ZeroMatrix(Matrix* mat) {
 }
 
 
+Matrix* LoadMatrix(const char* fileName) {
+    FILE* fpt;
+    fpt = fopen(fileName, "r");
+    if(fpt == NULL) {
+        printf("[ERROR]: File(%s) does not exits.\n",fileName);
+        exit(EXIT_FAILURE);
+    }
+    int row = 0;
+    int col = 1;
+    char buf;
+    buf = getc(fpt);
+    // Blank file is considered as 0x0 matrix
+    if(buf == EOF) {
+        printf("Blank file: %s\n",fileName);
+        return randomMatrix(0,0);
+    }
+    // Finding the column size
+    while(buf != EOF) {
+        if(buf=='\n') {
+            row++;
+        }
+        buf = getc(fpt);
+    }
+    fclose(fpt);
+    fpt = fopen(fileName,"r");
+    buf = getc(fpt);
+    // Finding the row size    
+    while(buf != '\n') {
+        if(buf == ',') {
+            col++;
+        }
+        buf = getc(fpt);
+    }
+    fclose(fpt);
+    // Finaly creating matrix to fill it with values
+    Matrix* matrix = new Matrix(row, col);
+    fpt = fopen(fileName, "r");
+    for(int r=0;r<row;r++)
+    {
+        for(int c=0;c<col;c++)
+        {    
+            buf = getc(fpt);
+            
+            char numberBuff[100];
+            int i = 0;
+            while((buf != ',') && (buf != '\n')) {
+                numberBuff[i] = buf;
+                buf = getc(fpt);
+                i++;
+            } 
+            numberBuff[i] = '\0';
+            long double a = strtold(numberBuff,NULL);
+            matrix->values[r][c] = a;
+        }    
+    }
+    fclose(fpt);
+    return matrix;
+}
+
+
+
 Matrix* randomMatrix(int row, int col) {
     Matrix* randMat = new Matrix(row, col);
     for(int i=0; i<row; i++) {
