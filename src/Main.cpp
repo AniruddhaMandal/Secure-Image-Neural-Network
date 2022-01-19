@@ -4,6 +4,7 @@
 #include<NeuralNetworks.h>
 #include<MathCal.h>
 #include<Tests.h>
+#include<Data.h>
 
 int main(){
     TestNeuralNet();
@@ -12,4 +13,5 @@ int main(){
     TestMatrix();
     TestRandomNumber();
     TestLoadMatrix();
+    TestMNISTloader();
 }

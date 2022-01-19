@@ -36,3 +36,14 @@ long int randomInt(long int min, long int max){
     }
     return rand + min;
 }
+
+int littleToBig(unsigned char* num) {
+    int big = 0;
+    int coeff = 1;
+    for(int i=0;i<4;i++) {
+        big += num[3-i]*coeff;
+        coeff *= 256; 
+    }
+    return big;
+
+}

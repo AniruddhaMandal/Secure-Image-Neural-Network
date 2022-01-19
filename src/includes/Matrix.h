@@ -128,15 +128,6 @@ Matrix* randomMatrix(int row, int col);
 */
 Matrix* LoadMatrix(const char* fileName);
 
-/**
- * Convertes the Image objects into Matrices.
- * Arguments: Pointer to the array of image 
- * objects and number of images in the array.
- * Retruns the array of the Matrix pointers. 
- * Each image is converted into a Matrix and 
- * saved into the array with the same index.
-*/
-Matrix** ImageToMatrix(const Image* ImagesObjs, int N_image);
 
 /**
  * Compare whether the index of maximum values
@@ -157,34 +148,13 @@ int Compare(Matrix* A, Matrix* B);
 long double MeanSquare(Matrix* A, Matrix* B) ;
 
 /**
- * Input data type for NeuralNetwork object.
- * Data struct consists of N_Data number of 
- * Matrix of images and corresponding labels
- * which is in vectorized form (i.e. One-Hot-Encoded form).
+ * Convertes the Image objects into Matrices.
+ * Arguments: Pointer to the array of image 
+ * objects and number of images in the array.
+ * Retruns the array of the Matrix pointers. 
+ * Each image is converted into a Matrix and 
+ * saved into the array with the same index.
 */
-struct Data {
-    int N_Data;
-    Matrix** M_Images;
-    Matrix** M_Labels;
-    
-    Data(int _N_Data) {
-        this->N_Data = _N_Data;
-    }
-
-    ~Data(){
-        for(int i=0; i<this->N_Data;i++) {
-            delete this->M_Images[i];
-            delete this->M_Labels[i];
-        }
-        delete[] this->M_Images;
-        delete[] this->M_Labels;
-        
-    }
-};
-
-/**
- * Converts the array of image objects into a Data struct.
-*/
-Data ImageToData(const Image* ImageObjs, int N_image);
+Matrix** ImageToMatrix(const Image* ImagesObjs, int N_image);
 int GLOBAL_COUNTER;
 #endif 

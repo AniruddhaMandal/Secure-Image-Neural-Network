@@ -316,35 +316,6 @@ Matrix HadamardProduct(const Matrix &A, const Matrix &B) {
 }
 
 
-Matrix** ImageToMatrix(const Image* ImageObjs, int N_image) {
-    Matrix** M_Images = new Matrix*[N_image];
-    for(int i=0; i<N_image;i++) {
-        M_Images[i] = new Matrix(ImageObjs[i]);
-    }
-    return M_Images;
-}
-
-
-Data ImageToData(const Image* ImageObjs, int N_image) {
-    //Enter number of image class as a variable insted of hard coding 10.
-    Data _newData(N_image);
-    
-    _newData.M_Labels = new Matrix*[N_image];
-    for(int i=0; i<N_image; i++) {
-        _newData.M_Labels[i] = new Matrix(10,1);
-        for(int j=0; j<10; j++) {
-            if(j == ImageObjs[i].label) _newData.M_Labels[i]->values[j][0] = 1;
-            else _newData.M_Labels[i]->values[j][0] = 0;
-        }
-    }
-
-    _newData.M_Images = new Matrix*[N_image];
-    for(int i=0; i<N_image; i++) {
-        _newData.M_Images[i] = new Matrix(ImageObjs[i]);
-    }
-    return _newData;
-}
-
 
 int Compare(Matrix* A, Matrix* B) {
     if(A->row != B->row || A->col != 1 || B->col != 1){

@@ -1,4 +1,5 @@
 #include<Matrix.h>
+#include<Data.h>
 #pragma once
 
 

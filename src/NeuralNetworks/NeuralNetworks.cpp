@@ -1,6 +1,7 @@
 #include<iostream>
 #include<dirent.h>
 #include<math.h>
+#include<Data.h>
 #include<sys/stat.h>
 #include<sys/types.h>
 #include<NeuralNetworks.h>
@@ -82,10 +83,10 @@ void NeuralNetwork::UpdateMiniBatch(Matrix** ImagePointer, Matrix** LabelPointer
     }
     this->_Subtract(BatchGradient,-1);
     // Debug purpose
-    char fileName[100];
-    mkdir("../DEBUG/",0777);
-    sprintf(fileName,"../DEBUG/net%d",GLOBAL_COUNTER);
-    BatchGradient->NetToCsv(fileName);
+    // char fileName[100];
+    // mkdir("../DEBUG/",0777);
+    // sprintf(fileName,"../DEBUG/net%d",GLOBAL_COUNTER);
+    // BatchGradient->NetToCsv(fileName);
     // End Debug purpose
     delete BatchGradient;
 }

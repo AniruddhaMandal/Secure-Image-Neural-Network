@@ -19,7 +19,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 add_executable(Main "${CMAKE_CURRENT_SOURCE_DIR}/src/Main.cpp")
 target_include_directories(Main PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/includes/")
-target_link_libraries(Main Matrix MathCal ImRead NeuralNetworks)
+target_link_libraries(Main Matrix MathCal ImRead NeuralNetworks Data z)
 
 add_library(Matrix SHARED "${CMAKE_CURRENT_SOURCE_DIR}/src/Math/Matrix.cpp")
 target_include_directories(Matrix PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/includes/")
@@ -35,3 +35,6 @@ target_include_directories(NeuralNetworks PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/sr
 
 add_library(Encryption SHARED "${CMAKE_CURRENT_SOURCE_DIR}/src/Encryption/EncryptionAlgorithm.cpp")
 target_include_directories(Encryption PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/includes/")
+
+add_library(Data SHARED "${CMAKE_CURRENT_SOURCE_DIR}/src/NeuralNetworks/Data.cpp")
+target_include_directories(Data PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src/includes")

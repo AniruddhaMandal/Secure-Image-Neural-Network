@@ -1,6 +1,7 @@
 #include<iostream>
 #include<ImRead.h>
 #include<Matrix.h>
+#include<Data.h>
 #include<sys/stat.h>
 #include<sys/types.h>
 
@@ -15,7 +16,7 @@ void TestFeedforward() {
     }
 
     Image* images = ImRead(fpt,10000);
-    Data Dataset = ImageToData(images, 10000);
+    Data Dataset = ImageToData(images, 0,10000);
 
     int layers[] = {1024,130,40,10};
     NeuralNetwork testNet(layers,4);
@@ -80,7 +81,7 @@ void TestAccuracy() {
     const char* file_name = "../CIFAR/data_batch_1.bin";
     FILE* fpt = fopen(file_name,"rb");
     Image* testImage = ImRead(fpt,1);
-    Data testData = ImageToData(testImage,1);
+    Data testData = ImageToData(testImage,0,1);
     testData.M_Labels[0]->Display();
     Matrix* A = testData.M_Labels[0];
     Matrix B = Matrix(10,1);
@@ -96,7 +97,7 @@ void TestAccuracy() {
 }
 
 void TestNeuralNet() {
-        
+    // Test Data Loading   
     const char* test_file_name = "../CIFAR/data_batch_2.bin";
     FILE* Tfpt;
     Tfpt = fopen(test_file_name,"rb");
@@ -104,26 +105,26 @@ void TestNeuralNet() {
         printf("ERROR:file doesn't exists!");
         exit(-1);
     }
-
     Image* Timages = ImRead(Tfpt,10000);
-    Data TestDataset = ImageToData(Timages, 1000);
+    Data TestDataset = ImageToData(Timages, 0, 1000);
 
-    const char* file_name = "../CIFAR/data_batch_1.bin";
+    // Train Data Loading
+    const char* file_name = "../CIFAR/data_batch_3.bin";
     FILE* fpt;
     fpt = fopen(file_name,"rb");
     if(fpt==NULL) {
         printf("[ERROR]: Cannot open %s\nNo such file exists.", file_name);
         exit(EXIT_FAILURE);
     }
-
     Image* trainImages = ImRead(fpt, 10000);
-    Data trainDataset = ImageToData(trainImages, 10);
+    Data trainDataset = ImageToData(trainImages, 7000, 1000);
 
-    int layers[] = {1024,130,40,10};
-    NeuralNetwork testNet = NeuralNetwork(layers,4);
-    testNet.NetToCsv("../DEBUG/testNet");
-    testNet.StochasticGradientDescent(trainDataset,TestDataset,0.5,10,3);
 
+    // int layers[] = {1024,130,40,10};
+    NeuralNetwork* testNet = LoadModel("../DEBUG/testNet");
+    // testNet.NetToCsv("../DEBUG/testNet");
+    testNet->StochasticGradientDescent(trainDataset,TestDataset,2.1,100,3);
+    testNet->SaveModel("../DEBUG/testNet");
 }
 
 void TestRandomNumber() {
@@ -164,4 +165,9 @@ void TestLoadMatrix() {
         }
     }
     printf("[PASSED]: LoadMatrix function.\n");
+}
+
+void TestMNISTloader() {
+    Data* mnist = loadMINIST();
+    mnist[1].M_Images[1]->Display();
 }

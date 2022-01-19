@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<ImRead.h>
 #include<stdint.h>
+#include<Matrix.h>
 
 #define CHANNEL_SIZE 1024
 Image* ImRead(FILE* fpt, int N_Image) {
@@ -23,4 +24,12 @@ uint8_t** ImProcess(Image* ImageObjs, int N_Image) {
         }
     }
     return GrayScale;
+}
+
+Matrix** ImageToMatrix(const Image* ImageObjs, int N_image) {
+    Matrix** M_Images = new Matrix*[N_image];
+    for(int i=0; i<N_image;i++) {
+        M_Images[i] = new Matrix(ImageObjs[i]);
+    }
+    return M_Images;
 }
