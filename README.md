@@ -6,22 +6,38 @@ Train neural network with the encrypted data. This repository is supposed to con
 
 ## Building The Project
 Please use **cmake** to compile the project. It would create a bunch of dynamically linkable libraries along with the main file (which is for testing purposes). 
+Download `gcc` and `cmake`. 
+```bash
+    # for debian based systems
+    sudo apt-get install build-essential cmake
+    # for arch based systems 
+    sudo pacman -S base-devel camke
+```
+Another dependency is `OpenMP`.
+```bash 
+    # for debian based systems
+    sudo apt-get isntall libopenmp-dev
+    # for arch based systems 
+    sudo pacman -S openmp
+```
+
 ### Note: 
 Include MathCal.h in the main file as it contains the initial seeds. Otherwise generated random numbers inside the random matrix would have same sign for all. Due to this reason the model would not learn.
 
 ## To Do:
-1. Identify why it is not learning.
-2. Fix the learning issue.
-3. Complete the encryption algorithm.
+1. Identify why it is not learning. :heavy_check_mark: 
+2. Fix the learning issue. :heavy_check_mark:
+3. Complete the encryption algorithm.:star2:
 4. (Possibly ) add a network visualization tool.
-5. Verify whether the _Accuracy function is working as expected.
+5. Verify whether the _Accuracy function is working as expected. :heavy_check_mark:
 6. Verify whether Matrix operations are working as expected. :heavy_check_mark: 
-7. Verify whether BackPropagation is working properly. (Confirm any calculation or overflow error)
+7. Verify whether BackPropagation is working properly. (Confirm any calculation or overflow error) :heavy_check_mark:
 8. Parallelize NeuralNetwork (possibily with pthread or fork).
-9. Solve any memory issues.
+9. Solve any memory issues. :heavy_check_mark:
 10. Change Random Number Generator. :heavy_check_mark:
-11. Investigate why learning is being stoped after some steps.
+11. Investigate why learning is being stoped after some steps. :heavy_check_mark:
 
 ## Problems:
-1. Sometimes learning sometimes it is not learning.
-2. Learning stoped after some steps.
+1. Sometimes learning sometimes it is not learning. :heavy_check_mark:
+2. Learning stoped after some steps. :heavy_check_mark:
+3. Computation is extreamly slow. Use GPU parallelization.
