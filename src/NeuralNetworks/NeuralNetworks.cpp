@@ -102,12 +102,16 @@ void NeuralNetwork::StochasticGradientDescent(const Data &Dataset,const Data &Te
     Matrix** LabelPointer; 
 
     for(int cy=0; cy<N_cycle; cy++){
+    printf("[%d]:",GLOBAL_COUNTER);
     for(int i=0; i<N_Batch; i++) {
             ImagePointer = Dataset.M_Images+(i*BatchSize);
             LabelPointer = Dataset.M_Labels+(i*BatchSize);
             this->UpdateMiniBatch(ImagePointer, LabelPointer, BatchSize,LearningRate);
-            this->Accuracy(TestData);
+            printf("#");
+            fflush(stdout);
     }
+    printf("\n");
+    this->Accuracy(TestData);
     }
 }
 
@@ -130,7 +134,7 @@ void NeuralNetwork::Accuracy(const Data &Data) {
         RMS += MeanSquare(&prediction, Data.M_Labels[i])/Data.N_Data;
     }
     long double acc = (long double) Sum/Data.N_Data;
-    printf("[%d]: %.10Lf\n",GLOBAL_COUNTER,acc);
+    printf("Accuracy: %.10Lf\n",acc);
     printf("RMS: %Lf\n\n", sqrt(RMS));
     GLOBAL_COUNTER++;
 }

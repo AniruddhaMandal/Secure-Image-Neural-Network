@@ -7,11 +7,12 @@
 #include<Data.h>
 
 int main(){
-    int layers[4] = {784,40,20,10};
-    NeuralNetwork testNet(layers, 4);
+    int layers[4] = {784,30,10};
+    NeuralNetwork testNet(layers, 3);
     Data* mnist = loadMINIST();
     printf("Data reading finished..\n");
     Data trainData = mnist[0];
     Data testData = mnist[1];
-    testNet.StochasticGradientDescent(trainData,testData,0.1,10,30);
+    testNet.StochasticGradientDescent(trainData,testData,0.9,10,1);
+    testNet.NetToCsv("../DEBUG/TrainedModel");
 }

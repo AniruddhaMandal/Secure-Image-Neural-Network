@@ -186,22 +186,32 @@ void Matrix::operator=(const Matrix &Obj) {
 
 Matrix Matrix::Sigmoid() {
     Matrix Sig = Matrix(this->row, this->col);
-    for(int i=0; i<this->row; i++) {
-        for(int j=0; j<this->col; j++) {
+    int i,j;
+    #pragma omp parallel shared(Sig) private(i,j) 
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<this->row; i++) {
+        for(j=0; j<this->col; j++) {
             Sig.values[i][j] = _Sigmoid(this->values[i][j]);
         }
+    }
     }
     return Sig;
 }
 
 Matrix Matrix::SigmoidPrime() {
     Matrix SigP = Matrix(this->row,this->col);
+    int i,j;
     long double sig;
-    for(int i=0; i<this->row; i++) {
-        for(int j=0; j<this->col; j++) {
+    #pragma omp parallel shared(SigP) private(i,j,sig)
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<this->row; i++) {
+        for(j=0; j<this->col; j++) {
             sig = _Sigmoid(this->values[i][j]);
             SigP.values[i][j] = sig*(1-sig);
         }
+    }
     }
     return SigP;
 }
@@ -279,10 +289,15 @@ Matrix* LoadMatrix(const char* fileName) {
 
 Matrix* randomMatrix(int row, int col) {
     Matrix* randMat = new Matrix(row, col);
-    for(int i=0; i<row; i++) {
-        for(int j=0; j<col; j++) {
+    int i,j;
+    #pragma omp parallel shared(randMat) private(i,j)
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<row; i++) {
+        for(j=0; j<col; j++) {
             randMat->values[i][j] = randomNumber(-1l,1l);
         }
+    }
     }
     return randMat;
 }
@@ -290,10 +305,15 @@ Matrix* randomMatrix(int row, int col) {
 
 Matrix operator *(long double I, const Matrix &M) {
     Matrix Product = Matrix(M.row,M.col);
-    for(int i=0; i<M.row; i++) {
-        for(int j=0; j<M.col; j++) {
+    int i,j;
+    #pragma omp parallel shared(Product) private(i,j)
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<M.row; i++) {
+        for(j=0; j<M.col; j++) {
             Product.values[i][j] = I*M.values[i][j];
         }
+    }
     }
     return Product;
 }
@@ -306,10 +326,16 @@ Matrix HadamardProduct(const Matrix &A, const Matrix &B) {
     }
 
     Matrix H_prod = Matrix(A.row,A.col);
-    for(int i=0; i<A.row;i++) {
-        for(int j=0; j<A.col; j++) {
+    int i,j;
+
+    #pragma omp parallel shared(H_prod) private(i,j)
+    {
+    #pragma omp for schedule(static)
+    for(i=0; i<A.row;i++) {
+        for(j=0; j<A.col; j++) {
             H_prod.values[i][j] = A.values[i][j]*B.values[i][j];
         }
+    }
     }
 
     return H_prod;
