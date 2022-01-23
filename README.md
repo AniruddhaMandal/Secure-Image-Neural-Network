@@ -8,17 +8,26 @@ Train neural network with the encrypted data. This repository is supposed to con
 Please use **cmake** to compile the project. It would create a bunch of dynamically linkable libraries along with the main file (which is for testing purposes). 
 Download `gcc` and `cmake`. 
 ```bash
-    # for debian based systems
-    sudo apt-get install build-essential cmake
-    # for arch based systems 
-    sudo pacman -S base-devel camke
+# for debian based systems
+$ sudo apt-get install build-essential cmake
+# for arch based systems 
+$ sudo pacman -S base-devel camke
 ```
 Another dependency is `OpenMP`.
 ```bash 
-    # for debian based systems
-    sudo apt-get isntall libopenmp-dev
-    # for arch based systems 
-    sudo pacman -S openmp
+# for debian based systems
+$ sudo apt-get isntall libopenmp-dev
+# for arch based systems 
+$ sudo pacman -S openmp
+```
+Create two folder called `DEBUG` and `build`. Go to the Build folder and use command: 
+```bash
+$ cmake ..
+$ make 
+```
+Then a executabel file called `Main` will be created along with some dynamically linked libraries. To run the program use command:
+```bash
+$ ./Main
 ```
 
 ### Note: 
